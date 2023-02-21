@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,5 +39,15 @@ public class PacienteController {
 		return repository.findAll(paginacao).map(DadosListagemPaciente::new);
 		
 	}
-
+	
+	@PutMapping
+	@Transactional
+	public void editar(@RequestBody @Valid  DadosEdicaoPaciente dados) {
+		
+		var paciente = repository.getReferenceById(dados.id());
+		
+		paciente.atualizarInformacoes(dados);
+		
+	}
+	
 }

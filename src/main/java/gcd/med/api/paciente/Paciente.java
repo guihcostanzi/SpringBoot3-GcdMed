@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import gcd.med.api.controller.DadosEdicaoPaciente;
 import gcd.med.api.endereco.Endereco;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -26,25 +27,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Paciente {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String nome;
 	private String email;
 	private String telefone;
 	private String cpf;
-	
+
 	@Embedded
 	private Endereco endereco;
-	
+
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Date dataCadastro;
-	
+
 	private Boolean ativo;
-	
+
 	public Paciente(DadosCadastroPaciente dados) {
 
 		this.ativo = true;
@@ -54,6 +56,20 @@ public class Paciente {
 		this.cpf = dados.cpf();
 		this.endereco = new Endereco(dados.endereco());
 		this.telefone = dados.telefone();
+
+	}
+
+	public void atualizarInformacoes(DadosEdicaoPaciente dados) {
+
+		if (dados.nome() != null) {
+			this.nome = dados.nome();
+		}
+		if (dados.telefone() != null) {
+			this.telefone = dados.telefone();
+		}
+		if (dados.endereco() != null) {
+			this.endereco.atualizarEndereco(dados.endereco());
+		}
 
 	}
 
