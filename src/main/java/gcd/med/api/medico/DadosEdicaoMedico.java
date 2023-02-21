@@ -1,7 +1,6 @@
 package gcd.med.api.medico;
 
 import gcd.med.api.endereco.DadosEndereco;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public record DadosEdicaoMedico( //Obs : parametros que podem ser alterados, na regra de negocio
