@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.hibernate.annotations.CreationTimestamp;
 
 import gcd.med.api.endereco.Endereco;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,12 +45,28 @@ public class Medico {
 	@Embedded
 	private Endereco endereco;
 	
-	//Annotation válida para DATE e CALENDAR. O TemporalType regula a precisão (Ex : Data, Data e Hora...)	
-	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
+	
+	@CreationTimestamp //Automaticamente define a data de cadastro no banco de dados.
+	@Temporal(TemporalType.DATE) //O TemporalType regula a precisão (Ex : Data, Data e Hora...)	
+	@Column(name = "data_cadastro")
 	private Calendar dataCadastro;
 	
 	private Boolean ativo;
+	
+public Medico(@Valid DadosCadastroMedico dados) {
+		
+		//Definido automaticamento durante o cadastro.
+		this.ativo = true;
+		
+		this.crm = dados.crm();
+		this.nome = dados.nome();
+		this.email = dados.email();
+		this.especialidade = dados.especialidade();
+		this.telefone = dados.telefone();
+		
+		this.endereco = new Endereco(dados.endereco());
+		
+	}
 
 }
 

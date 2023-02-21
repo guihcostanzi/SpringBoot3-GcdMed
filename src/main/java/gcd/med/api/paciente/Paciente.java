@@ -5,6 +5,7 @@ import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 
 import gcd.med.api.endereco.Endereco;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +40,7 @@ public class Paciente {
 	
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
+	@Column(name = "data_cadastro")
 	private Date dataCadastro;
 	
 	private Boolean ativo;
