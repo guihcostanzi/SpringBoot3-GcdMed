@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gcd.med.api.medico.DadosCadastroMedico;
+import gcd.med.api.medico.DadosEdicaoMedico;
 import gcd.med.api.medico.DadosListagemMedico;
 import gcd.med.api.medico.Medico;
 import gcd.med.api.medico.MedicoRepository;
@@ -39,6 +41,16 @@ public class MedicoController {
 		
 		//O método não deve devolver a entidade Medico diretamente, até por motivos de segurança.
 		//Por isso, é devolvido um DTO ( Data Transfer Object).
+	}
+	
+	@PutMapping
+	@Transactional // Como está escrevendo no banco, tem q ser uma transação.
+	public void editar(@RequestBody @Valid DadosEdicaoMedico dados) {
+		
+		var medico = repository.getReferenceById(dados.id());
+		
+		medico.atualizarInformacoes(dados);
+		
 	}
 
 }

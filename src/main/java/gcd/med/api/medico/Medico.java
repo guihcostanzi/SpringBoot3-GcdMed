@@ -29,44 +29,59 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Medico {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String nome;
 	private String crm;
 	private String telefone;
 	private String email;
-	
+
 	@Enumerated(EnumType.STRING)
 	private Especialidade especialidade;
-	
-	//Significa que o atributo multivalorado não será uma tabela, mas será acoplada à tabela do médico.
+
+	// Significa que o atributo multivalorado não será uma tabela, mas será acoplada
+	// à tabela do médico.
 	@Embedded
 	private Endereco endereco;
-	
-	
-	@CreationTimestamp //Automaticamente define a data de cadastro no banco de dados.
-	@Temporal(TemporalType.DATE) //O TemporalType regula a precisão (Ex : Data, Data e Hora...)	
+
+	@CreationTimestamp // Automaticamente define a data de cadastro no banco de dados.
+	@Temporal(TemporalType.DATE) // O TemporalType regula a precisão (Ex : Data, Data e Hora...)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro;
-	
+
 	private Boolean ativo;
-	
-public Medico(@Valid DadosCadastroMedico dados) {
-		
-		//Definido automaticamento durante o cadastro.
+
+	public Medico(@Valid DadosCadastroMedico dados) {
+
+		// Definido automaticamento durante o cadastro.
 		this.ativo = true;
-		
+
 		this.crm = dados.crm();
 		this.nome = dados.nome();
 		this.email = dados.email();
 		this.especialidade = dados.especialidade();
 		this.telefone = dados.telefone();
-		
+
 		this.endereco = new Endereco(dados.endereco());
-		
+
 	}
 
-}
+	public void atualizarInformacoes(DadosEdicaoMedico dados) {
 
+		if (dados.nome() != null) {
+			this.nome = dados.nome();
+		}
+
+		if (dados.telefone() != null) {
+			this.telefone = dados.nome();
+		}
+
+		if (dados.endereco() != null) {
+			this.endereco.atualizarEndereco(dados.endereco());
+		}
+
+	}
+}
